@@ -19,7 +19,11 @@ pub fn print_columns<P>(labels: &[String], messages: &[Vec<u8>], to_char: P)
     where P: Fn(u8) -> char
 {
     // We should have as many labels as we have columns of bytes
-    assert!(labels.len() == messages.len());
+    assert_eq!(labels.len(), messages.len());
+
+    // Determine how many lines of output we will print. Being requested to
+    // print zero messages is probably an error, so we'll panic in this case.
+    let output_len = ::max_length(&messages).unwrap();
 
     // Display the labels
     println!();
@@ -28,9 +32,6 @@ pub fn print_columns<P>(labels: &[String], messages: &[Vec<u8>], to_char: P)
     }
     println!();
     println!();
-
-    // Determine how many lines of output we will print.
-    let output_len = ::max_length(&messages).unwrap_or(0);
 
     // Print the messages in a columnar layout
     for line in 0..output_len {
