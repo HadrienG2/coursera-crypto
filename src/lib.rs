@@ -9,6 +9,13 @@ pub mod hexfile;
 use std::ops::BitXor;
 
 
+// Compute the maximum length of a set of messages, if non-empty
+pub fn max_length(messages: &Vec<Vec<u8>>) -> Option<usize> {
+    messages.iter()
+            .map(|message| message.len())
+            .max()
+}
+
 // XOR the common sublength of two streams of bytes
 pub fn xor_bytes(bytes1: &[u8], bytes2: &[u8]) -> Vec<u8> {
     bytes1.iter().zip(bytes2.iter())
