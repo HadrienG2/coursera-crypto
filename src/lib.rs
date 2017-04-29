@@ -4,32 +4,22 @@
 //! that all operations on secret data take constant time), and should therefore
 //! not be used as such. You have been warned.
 
+pub mod display;
 pub mod hexfile;
 
 use std::ops::BitXor;
 
 
 // Compute the maximum length of a set of messages, if non-empty
-pub fn max_length(messages: &Vec<Vec<u8>>) -> Option<usize> {
+pub fn max_length(messages: &[Vec<u8>]) -> Option<usize> {
     messages.iter()
             .map(|message| message.len())
             .max()
 }
 
-// XOR the common sublength of two streams of bytes
+// XOR the common sublength of two messages
 pub fn xor_bytes(bytes1: &[u8], bytes2: &[u8]) -> Vec<u8> {
     bytes1.iter().zip(bytes2.iter())
                  .map(|(b1, b2)| b1.bitxor(b2))
                  .collect()
-}
-
-// If the requested byte maps to a printable ASCII character, returns it.
-// Otherwise, return an unambiguously non-ASCII printable character.
-pub fn as_printable_char(byte: u8) -> char {
-    match byte {
-        // Can be interpreted as a printable ASCII character
-        b if b >= 0x20 && b <= 0x7E => b as char,
-        // Cannot be interpreted as printable ASCII
-        _ => '࿕',
-    }
 }
