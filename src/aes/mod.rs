@@ -11,10 +11,9 @@ use aes::state::{N_B, State};
 // ### BASIC DATA STRUCTURES ###
 
 // The inputs and outputs of AES are blocks of 128 bits
-const BLOCK_LENGTH: usize = 128;
-type Block = [u8; BLOCK_LENGTH/8];
-type Input = Block;
-type Output = Block;
+pub type Block128 = [u8; 128/8];
+pub type Input = Block128;
+pub type Output = Block128;
 
 // An AES key may be 128, 192 or 256 bits long
 type Key128 = [u8; 128/8];
