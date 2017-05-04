@@ -2,7 +2,7 @@
 //! slice of bytes into a stream of fixed-size blocks that can be used as input
 //! to a block cipher.
 
-use block_ciphers::Block128;
+use block_ciphers::{Block128, BLOCK_128_SIZE};
 use block_ciphers::padding::Padding128;
 use std::slice::Chunks;
 
@@ -23,13 +23,13 @@ impl<'a> Iterator for PKCS7Padding128<'a> {
             // Input slices are forwarded to the output, possibly with padding
             Some(ref slice) => {
                 // Copy all bytes from the input slice to the output block
-                let mut result: Block128 = [0; 16];
+                let mut result = [0; BLOCK_128_SIZE];
                 for (input, output) in slice.iter().zip(result.iter_mut()) {
                     *output = *input
                 }
 
                 // Add PKCS#7 compliant padding at the end if needed
-                let remaining = 16 - slice.len() as u8;
+                let remaining = BLOCK_128_SIZE - slice.len() as u8;
                 if remaining > 0 {
                     for output in result[slice.len()..].iter_mut() {
                         *output = remaining;
@@ -48,7 +48,7 @@ impl<'a> Iterator for PKCS7Padding128<'a> {
                     None
                 } else {
                     self.final_block_sent = true;
-                    Some([16; 16])
+                    Some([BLOCK_128_SIZE as u8; BLOCK_128_SIZE])
                 }
             }
         }
@@ -60,9 +60,9 @@ impl<'a> Padding128<'a> for PKCS7Padding128<'a> {
     // It is constructed from a message (slice of bytes)
     fn new(bytes: &'a [u8]) -> Self {
         Self {
-            raw_iterator: bytes.chunks(16),
+            raw_iterator: bytes.chunks(BLOCK_128_SIZE),
             final_block_sent: false,
-            block_count: bytes.len()/16 + 1,
+            block_count: bytes.len()/BLOCK_128_SIZE + 1,
         }
     }
 
