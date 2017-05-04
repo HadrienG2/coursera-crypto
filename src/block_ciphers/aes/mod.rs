@@ -233,8 +233,8 @@ pub fn inv_cipher(input: Input, round_keys: &RoundKeys) -> Output {
 
 #[cfg(test)]
 mod tests {
-    use aes;
-    use aes::gf_word::GFWord;
+    use block_ciphers::aes;
+    use block_ciphers::aes::gf_word::GFWord;
 
     // Check that 128-bit key expansion from appendix A works as expected
     #[test]

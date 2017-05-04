@@ -97,7 +97,7 @@ impl GFByte {
 
 #[cfg(test)]
 mod tests {
-    use aes::gf_byte::GFByte;
+    use block_ciphers::aes::gf_byte::GFByte;
 
     // Test that GFByte addition works as expected by the AES spec
     #[test]

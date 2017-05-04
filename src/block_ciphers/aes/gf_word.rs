@@ -128,7 +128,7 @@ impl GFWord {
 
 #[cfg(test)]
 mod tests {
-    use aes::gf_word::GFWord;
+    use block_ciphers::aes::gf_word::GFWord;
 
     // Test that GFWord multiplication works as expected by the AES spec
     #[test]
