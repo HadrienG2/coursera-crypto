@@ -3,8 +3,8 @@
 //! of bytes, each containing Nb bytes (Nb=4 for AES), and directly maps to
 //! an input or output block of the cipher.
 
-use aes::{DEC_SBOX, ENC_SBOX, Input, Output, RoundKeys, SBox};
-use aes::gf_word::GFWord;
+use block_ciphers::aes::{DEC_SBOX, ENC_SBOX, Input, Output, RoundKeys, SBox};
+use block_ciphers::aes::gf_word::GFWord;
 use std::fmt;
 
 

@@ -4,14 +4,14 @@ mod gf_byte;
 mod gf_word;
 mod state;
 
-use aes::gf_word::GFWord;
-use aes::state::{N_B, State};
+use block_ciphers::Block128;
+use block_ciphers::aes::gf_word::GFWord;
+use block_ciphers::aes::state::{N_B, State};
 
 
 // ### BASIC DATA STRUCTURES ###
 
 // The inputs and outputs of AES are blocks of 128 bits
-pub type Block128 = [u8; 128/8];
 pub type Input = Block128;
 pub type Output = Block128;
 

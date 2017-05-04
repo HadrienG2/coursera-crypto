@@ -4,7 +4,7 @@
 //! that all operations on secret data take constant time), and should therefore
 //! not be used as such. You have been warned.
 
-pub mod aes;
+pub mod block_ciphers;
 pub mod display;
 pub mod hexfile;
 

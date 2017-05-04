@@ -1,6 +1,6 @@
 //! This module helps manipulating bytes as elements of a finite field
 
-use aes::SBox;
+use block_ciphers::aes::SBox;
 use std::fmt;
 use std::ops::{Add, Mul};
 

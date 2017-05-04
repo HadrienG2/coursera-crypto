@@ -1,8 +1,8 @@
 //! This module helps manipulating 32-bit words as polynomials whose
 //! coefficients are finite field elements
 
-use aes::{ENC_SBOX, SBox};
-use aes::gf_byte::GFByte;
+use block_ciphers::aes::{ENC_SBOX, SBox};
+use block_ciphers::aes::gf_byte::GFByte;
 use std::fmt;
 use std::ops::{Add, Index, IndexMut, Mul};
 
