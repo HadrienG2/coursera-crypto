@@ -53,6 +53,10 @@ impl<'a> Iterator for PKCS7Padding128<'a> {
             }
         }
     }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        (self.block_count, Some(self.block_count))
+    }
 }
 
 // It also implements every other extra required of a padding scheme
@@ -64,11 +68,6 @@ impl<'a> Padding128<'a> for PKCS7Padding128<'a> {
             final_block_sent: false,
             block_count: bytes.len()/BLOCK_SIZE_128 + 1,
         }
-    }
-
-    // It knows its output size precisely
-    fn len(&self) -> usize {
-        self.block_count
     }
 }
 

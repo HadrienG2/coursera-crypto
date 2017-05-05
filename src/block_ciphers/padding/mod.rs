@@ -11,8 +11,4 @@ use block_ciphers::Block128;
 pub trait Padding128<'a> : Iterator<Item=Block128> {
     // Padded output is produced from an input message (slice of bytes)
     fn new(bytes: &'a [u8]) -> Self;
-
-    // Unlike a regular Rust iterator, we know in advance exactly how many
-    // blocks of output we are going to produce.
-    fn len(&self) -> usize;
 }
