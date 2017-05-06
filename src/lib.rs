@@ -10,6 +10,7 @@ extern crate arrayref;
 pub mod block_ciphers;
 pub mod display;
 pub mod hexfile;
+pub mod padding;
 
 use std::ops::BitXor;
 

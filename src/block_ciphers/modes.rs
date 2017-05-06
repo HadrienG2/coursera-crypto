@@ -1,7 +1,7 @@
 //! This module implementes various block cipher modes of operation
 
 use block_ciphers::{self, Block128, BLOCK_SIZE_128};
-use block_ciphers::padding::Padding128;
+use padding::PaddingScheme;
 use inplace_xor_bytes;
 
 
@@ -20,7 +20,7 @@ pub fn cbc_128<'a, KC, PI>(keyed_cipher: &KC,
                            init_vector: Block128,
                            padded_input: PI) -> Vec<u8>
     where KC: Fn(&Block128) -> Block128,
-          PI: Padding128<'a>
+          PI: PaddingScheme<'a, Block128>
 {
     // Map the stream of input blocks into a stream of CBC-encrypted blocks
     let mut last_ciphertext = init_vector;

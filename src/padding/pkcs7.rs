@@ -1,13 +1,13 @@
 //! This module implements the PKCS#7 padding scheme for turning an arbitrary
-//! slice of bytes into a stream of fixed-size blocks that can be used as input
-//! to a block cipher.
+//! slice of bytes into a stream of fixed-size blocks.
 
 use block_ciphers::{Block128, BLOCK_SIZE_128};
-use block_ciphers::padding::Padding128;
+use padding::PaddingScheme;
 use std::slice::Chunks;
 
 
-// For now, only a version for 128-bit blocks is implemented
+// Due to current Rust limitations on genericity over array types, only 128-bit
+// blocks of bytes are currently supported as a padding unit
 pub struct PKCS7Padding128<'a> {
     raw_iterator: Chunks<'a, u8>,
     final_block_sent: bool,
@@ -61,7 +61,7 @@ impl<'a> Iterator for PKCS7Padding128<'a> {
 }
 
 // It also implements every other extra required of a padding scheme
-impl<'a> Padding128<'a> for PKCS7Padding128<'a> {
+impl<'a> PaddingScheme<'a, Block128> for PKCS7Padding128<'a> {
     // It is constructed from a message (slice of bytes)
     fn new(bytes: &'a [u8]) -> Self {
         Self {
@@ -75,8 +75,8 @@ impl<'a> Padding128<'a> for PKCS7Padding128<'a> {
 
 #[cfg(test)]
 mod tests {
-    use block_ciphers::padding::Padding128;
-    use block_ciphers::padding::pkcs7::PKCS7Padding128;
+    use padding::PaddingScheme;
+    use padding::pkcs7::PKCS7Padding128;
 
     #[test]
     fn empty_input() {
