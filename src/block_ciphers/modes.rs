@@ -78,7 +78,7 @@ pub fn inv_cbc_128<KIC>(keyed_inv_cipher: &KIC,
 pub fn ctr_128<KC>(keyed_cipher: &KC,
                    init_vector: Block128,
                    input: &[u8]) -> Vec<u8>
-    where KC: Fn(Block128) -> Block128
+    where KC: Fn(&Block128) -> Block128
 {
     // CTR is based on maintaining an internal counter, starting at the IV
     let mut counter = init_vector;
@@ -98,7 +98,8 @@ pub fn ctr_128<KC>(keyed_cipher: &KC,
     // which acts as a one-time pad, operating as a stream cipher
     let mut output = Vec::with_capacity(input.len());
     for input in input.chunks(BLOCK_SIZE_128) {
-        let one_time_pad = keyed_cipher(next_counter());
+        let counter = next_counter();
+        let one_time_pad = keyed_cipher(&counter);
         for (input_byte, otp_byte) in input.iter().zip(one_time_pad.iter()) {
             output.push(input_byte ^ otp_byte);
         }
