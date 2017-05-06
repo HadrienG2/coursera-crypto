@@ -4,7 +4,7 @@ mod gf_byte;
 mod gf_word;
 mod state;
 
-use block_ciphers::Block128;
+use block_ciphers::Block128u8;
 use block_ciphers::aes::gf_word::GFWord;
 use block_ciphers::aes::state::{N_B, State};
 
@@ -12,13 +12,13 @@ use block_ciphers::aes::state::{N_B, State};
 // ### BASIC DATA STRUCTURES ###
 
 // The inputs and outputs of AES are blocks of 128 bits
-pub type Input = Block128;
-pub type Output = Block128;
+pub type Input = Block128u8;
+pub type Output = Block128u8;
 
 // An AES key may be 128, 192 or 256 bits long
-type Key128 = [u8; 128/8];
-type Key192 = [u8; 192/8];
-type Key256 = [u8; 256/8];
+pub type Key128 = [u8; 128/8];
+pub type Key192 = [u8; 192/8];
+pub type Key256 = [u8; 256/8];
 
 // AES also uses byte substitution tables, aka S-boxes
 type SBox = [u8; 256];
