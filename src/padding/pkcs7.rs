@@ -3,6 +3,7 @@
 
 use block_ciphers::{Block128u8, BLOCK_SIZE_128_U8};
 use padding::PaddingScheme;
+use std::mem;
 use std::slice::Chunks;
 
 
@@ -26,7 +27,7 @@ impl<'a> Iterator for PKCS7Padding128u8<'a> {
                 // Copy all bytes from the input slice to the output block
                 let input_len = input_slice.len();
                 let mut result = [0; BLOCK_SIZE_128_U8];
-                result[..input_len].clone_from_slice(input_slice);
+                result[..input_len].copy_from_slice(input_slice);
 
                 // Add PKCS#7 compliant padding at the end if needed
                 let remaining = (BLOCK_SIZE_128_U8 - input_len) as u8;
@@ -64,10 +65,11 @@ impl<'a> Iterator for PKCS7Padding128u8<'a> {
 impl<'a> PaddingScheme<'a, Block128u8> for PKCS7Padding128u8<'a> {
     // It is constructed from a message (slice of bytes)
     fn new(bytes: &'a [u8]) -> Self {
+        let block_size_u8 = mem::size_of::<Block128u8>();
         Self {
-            raw_iterator: bytes.chunks(BLOCK_SIZE_128_U8),
+            raw_iterator: bytes.chunks(block_size_u8),
             final_block_sent: false,
-            block_count: bytes.len()/BLOCK_SIZE_128_U8 + 1,
+            block_count: bytes.len()/block_size_u8 + 1,
         }
     }
 }
