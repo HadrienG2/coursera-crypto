@@ -104,10 +104,10 @@ const DEC_SBOX: SBox = [0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38,
 
 // AES keys are expanded into a set of round keys. The amount of encryption
 // rounds Nr, which determins the amount of round keys, depends on the key size.
-type RoundKeys = [GFWord];
-type RoundKeys128 = [GFWord; N_B*(10+1)];  // Nr = 10 for 128-bit keys
-type RoundKeys192 = [GFWord; N_B*(12+1)];  // Nr = 12 for 192-bit keys
-type RoundKeys256 = [GFWord; N_B*(14+1)];  // Nr = 14 for 256-bit keys
+pub type RoundKeys = [GFWord];
+pub type RoundKeys128 = [GFWord; N_B*(10+1)];  // Nr = 10 for 128-bit keys
+pub type RoundKeys192 = [GFWord; N_B*(12+1)];  // Nr = 12 for 192-bit keys
+pub type RoundKeys256 = [GFWord; N_B*(14+1)];  // Nr = 14 for 256-bit keys
 
 // Here is a generic key expansion routine. It works by taking up the slice of
 // keys and writing into the slice of round keys.
