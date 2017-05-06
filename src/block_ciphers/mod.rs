@@ -2,6 +2,7 @@
 //! ciphers, various operating modes, padding...
 
 pub mod aes;
+pub mod modes;
 pub mod padding;
 
 // This is a 128-bit block, which is for now the only block size that we support
