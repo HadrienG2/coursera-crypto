@@ -4,7 +4,7 @@
 use block_ciphers::aes::{ENC_SBOX, SBox};
 use block_ciphers::aes::gf_byte::GFByte;
 use std::fmt;
-use std::ops::{Add, Index, IndexMut, Mul};
+use std::ops::{Add, AddAssign, Index, IndexMut, Mul, MulAssign};
 
 
 /// 4-byte words are sometimes interpreted by AES as 4-term polynomials with
@@ -27,6 +27,12 @@ impl Add for GFWord {
         }
     }
 }
+//
+impl AddAssign for GFWord {
+    fn add_assign(&mut self, rhs: Self) {
+        *self = self.clone() + rhs;
+    }
+}
 
 /// Multiplication is again defined as multiplication of polynomials modulo an
 /// irreducible polynomial, however this time the polynomial is x^4 + 1.
@@ -44,6 +50,12 @@ impl Mul for GFWord {
                     a[2]*b[0] + a[1]*b[1] + a[0]*b[2] + a[3]*b[3],
                     a[3]*b[0] + a[2]*b[1] + a[1]*b[2] + a[0]*b[3]],
         }
+    }
+}
+//
+impl MulAssign for GFWord {
+    fn mul_assign(&mut self, rhs: Self) {
+        *self = self.clone() * rhs;
     }
 }
 

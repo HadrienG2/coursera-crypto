@@ -7,7 +7,11 @@ use block_ciphers::Block128;
 
 
 // A padding scheme starts from a message (represented as a slice of bytes) and
-// produces a stream of blocks. For now, we only support 128-bit blocks
+// produces a stream of blocks. For now, we only support 128-bit blocks.
+//
+// A conforming implementation should provide an appropriate override of
+// size_hint in order to tell exactly how many blocks it is going to produce.
+//
 pub trait Padding128<'a> : Iterator<Item=Block128> {
     // Padded output is produced from an input message (slice of bytes)
     fn new(bytes: &'a [u8]) -> Self;

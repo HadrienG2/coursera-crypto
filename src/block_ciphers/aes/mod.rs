@@ -104,7 +104,7 @@ const DEC_SBOX: SBox = [0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38,
 
 // AES keys are expanded into a set of round keys. The amount of encryption
 // rounds Nr, which determins the amount of round keys, depends on the key size.
-pub type RoundKeys = [GFWord];
+type RoundKeys = [GFWord];
 pub type RoundKeys128 = [GFWord; N_B*(10+1)];  // Nr = 10 for 128-bit keys
 pub type RoundKeys192 = [GFWord; N_B*(12+1)];  // Nr = 12 for 192-bit keys
 pub type RoundKeys256 = [GFWord; N_B*(14+1)];  // Nr = 14 for 256-bit keys
@@ -171,7 +171,7 @@ pub fn key_expansion_256(key: &Key256) -> RoundKeys256 {
 // ### ENCRYPTION AND DECRYPTION ###
 
 // The AES cipher
-pub fn cipher(input: Input, round_keys: &RoundKeys) -> Output {
+pub fn cipher(input: &Input, round_keys: &RoundKeys) -> Output {
     // Make sure that the amount of round keys is sensical
     assert_eq!(round_keys.len() % N_B, 0);
     assert!(round_keys.len() > N_B);
@@ -201,7 +201,7 @@ pub fn cipher(input: Input, round_keys: &RoundKeys) -> Output {
 }
 
 // Straightforward inverse cipher
-pub fn inv_cipher(input: Input, round_keys: &RoundKeys) -> Output {
+pub fn inv_cipher(input: &Input, round_keys: &RoundKeys) -> Output {
     // Make sure that the amount of round keys is sensical
     assert_eq!(round_keys.len() % N_B, 0);
     assert!(round_keys.len() > N_B);
@@ -354,8 +354,8 @@ mod tests {
     #[test]
     fn cipher_example() {
         let output = 
-            aes::cipher([0x32, 0x43, 0xf6, 0xa8, 0x88, 0x5a, 0x30, 0x8d,
-                         0x31, 0x31, 0x98, 0xa2, 0xe0, 0x37, 0x07, 0x34],
+            aes::cipher(&[0x32, 0x43, 0xf6, 0xa8, 0x88, 0x5a, 0x30, 0x8d,
+                          0x31, 0x31, 0x98, 0xa2, 0xe0, 0x37, 0x07, 0x34],
                         &aes::key_expansion_128(&[0x2b, 0x7e, 0x15, 0x16,
                                                   0x28, 0xae, 0xd2, 0xa6,
                                                   0xab, 0xf7, 0x15, 0x88,
@@ -376,11 +376,11 @@ mod tests {
                                                0x04, 0x05, 0x06, 0x07,
                                                0x08, 0x09, 0x0a, 0x0b,
                                                0x0c, 0x0d, 0x0e, 0x0f]);
-        let cipher_128 = aes::cipher(plaintext, &key_128);
+        let cipher_128 = aes::cipher(&plaintext, &key_128);
         assert_eq!(cipher_128,
                    [0x69, 0xc4, 0xe0, 0xd8, 0x6a, 0x7b, 0x04, 0x30,
                     0xd8, 0xcd, 0xb7, 0x80, 0x70, 0xb4, 0xc5, 0x5a]);
-        assert_eq!(aes::inv_cipher(cipher_128, &key_128), plaintext);
+        assert_eq!(aes::inv_cipher(&cipher_128, &key_128), plaintext);
 
         // 192-bit cipher test
         let key_192 = aes::key_expansion_192(&[0x00, 0x01, 0x02, 0x03,
@@ -389,11 +389,11 @@ mod tests {
                                                0x0c, 0x0d, 0x0e, 0x0f,
                                                0x10, 0x11, 0x12, 0x13,
                                                0x14, 0x15, 0x16, 0x17]);
-        let cipher_192 = aes::cipher(plaintext, &key_192);
+        let cipher_192 = aes::cipher(&plaintext, &key_192);
         assert_eq!(cipher_192,
                    [0xdd, 0xa9, 0x7c, 0xa4, 0x86, 0x4c, 0xdf, 0xe0,
                     0x6e, 0xaf, 0x70, 0xa0, 0xec, 0x0d, 0x71, 0x91]);
-        assert_eq!(aes::inv_cipher(cipher_192, &key_192), plaintext);
+        assert_eq!(aes::inv_cipher(&cipher_192, &key_192), plaintext);
 
         // 256-bit cipher test
         let key_256 = aes::key_expansion_256(&[0x00, 0x01, 0x02, 0x03,
@@ -404,10 +404,10 @@ mod tests {
                                                0x14, 0x15, 0x16, 0x17,
                                                0x18, 0x19, 0x1a, 0x1b,
                                                0x1c, 0x1d, 0x1e, 0x1f]);
-        let cipher_256 = aes::cipher(plaintext, &key_256);
+        let cipher_256 = aes::cipher(&plaintext, &key_256);
         assert_eq!(cipher_256,
                    [0x8e, 0xa2, 0xb7, 0xca, 0x51, 0x67, 0x45, 0xbf,
                     0xea, 0xfc, 0x49, 0x90, 0x4b, 0x49, 0x60, 0x89]);
-        assert_eq!(aes::inv_cipher(cipher_256, &key_256), plaintext);
+        assert_eq!(aes::inv_cipher(&cipher_256, &key_256), plaintext);
     }
 }

@@ -2,7 +2,7 @@
 
 use block_ciphers::aes::SBox;
 use std::fmt;
-use std::ops::{Add, Mul};
+use std::ops::{Add, AddAssign, Mul, MulAssign};
 
 
 /// The AES algorithm manipulates bytes, which are interpreted as elements of the
@@ -21,6 +21,12 @@ impl Add for GFByte {
         Self {
             byte: self.byte ^ rhs.byte,
         }
+    }
+}
+//
+impl AddAssign for GFByte {
+    fn add_assign(&mut self, rhs: Self) {
+        self.byte ^= rhs.byte;
     }
 }
 
@@ -61,6 +67,12 @@ impl Mul for GFByte {
         Self {
             byte: accumulator,
         }
+    }
+}
+//
+impl MulAssign for GFByte {
+    fn mul_assign(&mut self, rhs: Self) {
+        *self = self.clone() * rhs
     }
 }
 

@@ -19,8 +19,8 @@ pub struct State {
 }
 
 /// The AES state is built from an input block...
-impl From<Input> for State {
-    fn from(input: Input) -> Self {
+impl<'a> From<&'a Input> for State {
+    fn from(input: &'a Input) -> Self {
         Self {
             words: [GFWord::new(input[0],  input[1],  input[2],  input[3]),
                     GFWord::new(input[4],  input[5],  input[6],  input[7]),
@@ -91,7 +91,7 @@ impl State {
     pub fn mix_columns(&mut self) {
         let a = GFWord::new(0x02, 0x01, 0x01, 0x03);
         for word in self.words.iter_mut() {
-            *word = *word * a;
+            *word *= a;
         }
     }
 
@@ -100,7 +100,7 @@ impl State {
     pub fn inv_mix_columns(&mut self) {
         let inv_a = GFWord::new(0x0e, 0x09, 0x0d, 0x0b);
         for word in self.words.iter_mut() {
-            *word = *word * inv_a;
+            *word *= inv_a;
         }
     }
 
@@ -112,7 +112,7 @@ impl State {
 
         // XOR each column of the state with the key schedule
         for (column, key) in self.words.iter_mut().zip(round_keys.iter()) {
-            *column = *column + *key;
+            *column += *key;
         }
     }
 

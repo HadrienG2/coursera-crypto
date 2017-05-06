@@ -18,20 +18,20 @@ pub struct PKCS7Padding128<'a> {
 impl<'a> Iterator for PKCS7Padding128<'a> {
     type Item = Block128;
 
+    // It produces padded blocks
     fn next(&mut self) -> Option<Self::Item> {
         match self.raw_iterator.next() {
             // Input slices are forwarded to the output, possibly with padding
-            Some(ref slice) => {
+            Some(ref input_slice) => {
                 // Copy all bytes from the input slice to the output block
+                let input_len = input_slice.len();
                 let mut result = [0; BLOCK_SIZE_128];
-                for (input, output) in slice.iter().zip(result.iter_mut()) {
-                    *output = *input
-                }
+                result[..input_len].clone_from_slice(input_slice);
 
                 // Add PKCS#7 compliant padding at the end if needed
-                let remaining = (BLOCK_SIZE_128 - slice.len()) as u8;
+                let remaining = (BLOCK_SIZE_128 - input_len) as u8;
                 if remaining > 0 {
-                    for output in result[slice.len()..].iter_mut() {
+                    for output in result[input_len..].iter_mut() {
                         *output = remaining;
                     }
                     self.final_block_sent = true;
@@ -54,6 +54,7 @@ impl<'a> Iterator for PKCS7Padding128<'a> {
         }
     }
 
+    // It knows its size precisely
     fn size_hint(&self) -> (usize, Option<usize>) {
         (self.block_count, Some(self.block_count))
     }
