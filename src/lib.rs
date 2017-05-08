@@ -14,8 +14,6 @@ pub mod hash;
 pub mod hexfile;
 pub mod padding;
 
-use std::ops::BitXor;
-
 
 // Compute the maximum length of a set of messages, if non-empty
 pub fn max_length(messages: &[Vec<u8>]) -> Option<usize> {
@@ -29,7 +27,7 @@ pub fn max_length(messages: &[Vec<u8>]) -> Option<usize> {
 // than the other, only the shortest subset of the XORed bytes will be returned
 pub fn xor_bytes(bytes1: &[u8], bytes2: &[u8]) -> Vec<u8> {
     bytes1.iter().zip(bytes2.iter())
-                 .map(|(b1, b2)| b1.bitxor(b2))
+                 .map(|(b1, b2)| b1 ^ b2)
                  .collect()
 }
 
