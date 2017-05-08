@@ -1,6 +1,7 @@
 //! This module implements padding schemes for turning arbitrary slices of bytes
 //! into streams of fixed-size blocks.
 
+pub mod merkle_damgard;
 pub mod pkcs7;
 
 

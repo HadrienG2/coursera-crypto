@@ -1,7 +1,7 @@
 //! This module implements the PKCS#7 padding scheme for turning an arbitrary
 //! slice of bytes into a stream of fixed-size blocks.
 
-use block_ciphers::{Block128u8, BLOCK_SIZE_128_U8};
+use blocks::{Block128u8, BLOCK_LEN_128_U8};
 use padding::PaddingScheme;
 use std::mem;
 use std::slice::Chunks;
@@ -26,11 +26,11 @@ impl<'a> Iterator for PKCS7Padding128u8<'a> {
             Some(ref input_slice) => {
                 // Copy all bytes from the input slice to the output block
                 let input_len = input_slice.len();
-                let mut result = [0; BLOCK_SIZE_128_U8];
+                let mut result = [0; BLOCK_LEN_128_U8];
                 result[..input_len].copy_from_slice(input_slice);
 
                 // Add PKCS#7 compliant padding at the end if needed
-                let remaining = (BLOCK_SIZE_128_U8 - input_len) as u8;
+                let remaining = (BLOCK_LEN_128_U8 - input_len) as u8;
                 if remaining > 0 {
                     for output in result[input_len..].iter_mut() {
                         *output = remaining;
@@ -49,7 +49,7 @@ impl<'a> Iterator for PKCS7Padding128u8<'a> {
                     None
                 } else {
                     self.final_block_sent = true;
-                    Some([BLOCK_SIZE_128_U8 as u8; BLOCK_SIZE_128_U8])
+                    Some([BLOCK_LEN_128_U8 as u8; BLOCK_LEN_128_U8])
                 }
             }
         }

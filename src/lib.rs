@@ -7,8 +7,10 @@
 #[macro_use]
 extern crate arrayref;
 
+pub mod blocks;
 pub mod block_ciphers;
 pub mod display;
+pub mod hash;
 pub mod hexfile;
 pub mod padding;
 

@@ -1,6 +1,6 @@
 //! This module implementes various block cipher modes of operation
 
-use block_ciphers::{self, Block128u8, BLOCK_SIZE_128_U8};
+use blocks::{self, Block128u8, BLOCK_LEN_128_U8};
 use padding::PaddingScheme;
 use inplace_xor_bytes;
 
@@ -31,7 +31,7 @@ pub fn cbc_128u8<'a, KC, PI>(keyed_cipher: &KC,
     });
 
     // Collect the output blocks into an output ciphertext
-    block_ciphers::into_vec_128u8(output_iter)
+    blocks::into_vec_128u8(output_iter)
 }
 
 
@@ -50,9 +50,9 @@ pub fn inv_cbc_128u8<KIC>(keyed_inv_cipher: &KIC,
     // Make sure that the input is a reasonable sequence of blocks, and produce
     // an iterator of blocks out of it
     let input_len = input.len();
-    if input_len % BLOCK_SIZE_128_U8 != 0 { return None; }
-    let input_iter = input.chunks(BLOCK_SIZE_128_U8)
-                          .map(|slice| block_ciphers::as_block_128u8(slice));
+    if input_len % BLOCK_LEN_128_U8 != 0 { return None; }
+    let input_iter = input.chunks(BLOCK_LEN_128_U8)
+                          .map(|slice| blocks::as_block_128u8(slice));
 
     // Map the stream of input blocks into a stream of CBC-decrypted blocks
     let mut last_ciphertext = &init_vector;
@@ -64,7 +64,7 @@ pub fn inv_cbc_128u8<KIC>(keyed_inv_cipher: &KIC,
     });
 
     // Collect the output blocks into an output message
-    let mut output_vec = block_ciphers::into_vec_128u8(output_iter);
+    let mut output_vec = blocks::into_vec_128u8(output_iter);
 
     // Discard the padding and output the final message
     let padding_bytes = output_vec[input_len-1];
@@ -84,12 +84,12 @@ pub fn ctr_128u8<KC>(keyed_cipher: &KC,
     let mut counter = init_vector;
     let mut next_counter = move || -> Block128u8 {
         let old_counter = counter;
-        let mut index = BLOCK_SIZE_128_U8 - 1;
+        let mut index = BLOCK_LEN_128_U8 - 1;
         loop {
             let (new_value, overflow) = counter[index].overflowing_add(1);
             counter[index] = new_value;
             if !overflow { break; }
-            index = if index != 0 { index-1 } else { BLOCK_SIZE_128_U8-1 };
+            index = if index != 0 { index-1 } else { BLOCK_LEN_128_U8-1 };
         }
         old_counter
     };
@@ -97,7 +97,7 @@ pub fn ctr_128u8<KC>(keyed_cipher: &KC,
     // We build our output by XORing the input bytes with the encrypted counter,
     // which acts as a one-time pad, operating as a stream cipher
     let mut output = Vec::with_capacity(input.len());
-    for input in input.chunks(BLOCK_SIZE_128_U8) {
+    for input in input.chunks(BLOCK_LEN_128_U8) {
         let counter = next_counter();
         let one_time_pad = keyed_cipher(&counter);
         for (input_byte, otp_byte) in input.iter().zip(one_time_pad.iter()) {

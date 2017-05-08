@@ -4,9 +4,9 @@ mod gf_byte;
 mod gf_word;
 mod state;
 
-use block_ciphers::Block128u8;
 use block_ciphers::aes::gf_word::GFWord;
 use block_ciphers::aes::state::{N_B, State};
+use blocks::Block128u8;
 
 
 // ### BASIC DATA STRUCTURES ###
