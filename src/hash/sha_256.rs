@@ -54,8 +54,13 @@ const H_0: [u32; 8] = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
                       0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
 
 
+// SHA-256 digests will be emitted in the following format
+pub const DIGEST_LEN: usize = 256/8;
+pub type Digest = [u8; DIGEST_LEN];
+
+
 // Compute the SHA-256 hash of any message
-pub fn sha_256(message: &[u8]) -> [u8; 256/8] {
+pub fn sha_256(message: &[u8]) -> Digest {
     // Set the initial hash value
     let mut hash = H_0;
 
