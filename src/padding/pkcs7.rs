@@ -100,36 +100,23 @@ mod tests {
 
     #[test]
     fn fifteen_byte_input() {
-        let input = &[42, 42, 42, 42, 42, 42, 42, 42,
-                      42, 42, 42, 42, 42, 42, 42];
+        let input = &[43, 44, 45, 46, 47, 48, 49, 50,
+                      51, 52, 53, 54, 55, 56, 57];
         let mut padded_iter = PKCS7Padding128u8::new(input);
-        assert_eq!(padded_iter.next(), Some([42, 42, 42, 42, 42, 42, 42, 42,
-                                             42, 42, 42, 42, 42, 42, 42, 1]));
+        assert_eq!(padded_iter.next(), Some([43, 44, 45, 46, 47, 48, 49, 50,
+                                             51, 52, 53, 54, 55, 56, 57, 1]));
         assert_eq!(padded_iter.next(), None);
     }
 
     #[test]
     fn sixteen_byte_input() {
-        let input = &[42, 42, 42, 42, 42, 42, 42, 42,
-                      42, 42, 42, 42, 42, 42, 42, 42];
+        let input = &[58, 59, 60, 61, 62, 63, 64, 65,
+                      66, 67, 68, 69, 70, 71, 72, 73];
         let mut padded_iter = PKCS7Padding128u8::new(input);
-        assert_eq!(padded_iter.next(), Some([42, 42, 42, 42, 42, 42, 42, 42,
-                                             42, 42, 42, 42, 42, 42, 42, 42]));
+        assert_eq!(padded_iter.next(), Some([58, 59, 60, 61, 62, 63, 64, 65,
+                                             66, 67, 68, 69, 70, 71, 72, 73]));
         assert_eq!(padded_iter.next(), Some([16, 16, 16, 16, 16, 16, 16, 16,
                                              16, 16, 16, 16, 16, 16, 16, 16]));
-        assert_eq!(padded_iter.next(), None);
-    }
-
-    #[test]
-    fn seventeen_byte_input() {
-        let input = &[42, 42, 42, 42, 42, 42, 42, 42,
-                      42, 42, 42, 42, 42, 42, 42, 42,
-                      42];
-        let mut padded_iter = PKCS7Padding128u8::new(input);
-        assert_eq!(padded_iter.next(), Some([42, 42, 42, 42, 42, 42, 42, 42,
-                                             42, 42, 42, 42, 42, 42, 42, 42]));
-        assert_eq!(padded_iter.next(), Some([42, 15, 15, 15, 15, 15, 15, 15,
-                                             15, 15, 15, 15, 15, 15, 15, 15]));
         assert_eq!(padded_iter.next(), None);
     }
 }
