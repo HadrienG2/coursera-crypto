@@ -56,3 +56,18 @@ pub fn parse_hex(string: &str) -> Result<Vec<u8>, Error> {
     // Return the bytes
     Ok(bytes)
 }
+
+
+// Convert a sequence of bytes to a string
+pub fn to_hex(bytes: &[u8]) -> String {
+    const HEX_DIGITS: &'static [char] = &['0', '1', '2', '3',
+                                          '4', '5', '6', '7',
+                                          '8', '9', 'a', 'b',
+                                          'c', 'd', 'e', 'f'];
+    let mut result = String::with_capacity(2 * bytes.len());
+    for b in bytes {
+        result.push(HEX_DIGITS[(b >> 4) as usize]);
+        result.push(HEX_DIGITS[(b & 0xf) as usize]);
+    }
+    result
+}
