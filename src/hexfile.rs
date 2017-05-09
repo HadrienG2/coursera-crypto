@@ -26,7 +26,7 @@ pub enum Error {
 
 /// Load hex-encoded bytes from a file
 pub fn load_bytes(filename: &str) -> Result<Vec<u8>, Error> {
-    // Fetch an hex string from a file, and strip any trailing newline
+    // Fetch string data from a file, and strip any trailing newline
     let mut raw_str = String::new();
     {
         let mut input_file = File::open(filename).map_err(Error::Loading)?;
@@ -34,11 +34,18 @@ pub fn load_bytes(filename: &str) -> Result<Vec<u8>, Error> {
     }
     let trimmed_str = raw_str.trim_right();
 
-    // Check that the string has the right length
-    if trimmed_str.len() % 2 != 0 { return Err(Error::OddLength); }
+    // Parse the result as a hex string
+    parse_hex(&trimmed_str)
+}
+
+
+// Parse a string of hex-encoded bytes
+pub fn parse_hex(string: &str) -> Result<Vec<u8>, Error> {
+    // Check that the string has a plausible length
+    if string.len() % 2 != 0 { return Err(Error::OddLength); }
 
     // Decode it into a vector of bytes
-    let mut chars = trimmed_str.chars();
+    let mut chars = string.chars();
     let mut bytes = Vec::new();
     while let (Some(ch1), Some(ch2)) = (chars.next(), chars.next()) {
         let digit1 = ch1.to_digit(16).ok_or(Error::InvalidChars)?;
