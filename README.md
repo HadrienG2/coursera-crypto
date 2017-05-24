@@ -16,7 +16,7 @@ securely and why it matters, here are some nice resources:
 
 * [Coding rules for crypto code](https://cryptocoding.net/index.php/Coding_rules),
   and [associated references](https://cryptocoding.net/index.php/References)
-* [More about constant-time algorithms]<https://www.bearssl.org/constanttime.html>
-* [Thoughts on Rust cryptography](https://speakerdeck.com/tarcieri/thoughts-on-rust-cryptography] (and
+* [More about constant-time algorithms](https://www.bearssl.org/constanttime.html)
+* [Thoughts on Rust cryptography](https://speakerdeck.com/tarcieri/thoughts-on-rust-cryptography) (and
   [a discussion](https://www.reddit.com/r/rust/comments/4d8hxm/what_crypto_library_do_yall_use/)
   involving the author about the state of Rust crypto libraries in 2016)
